@@ -1,0 +1,37 @@
+import axios from "axios"
+import { createContext, useEffect, useState } from "react"
+
+export const authContext = createContext({ auth: false }); // initial state is an object with an 'auth' property
+export default function AuthProvider({ children }) {
+  const [auth, setAuth] = useState({ auth: false }); // state is also an object with an 'auth' property
+  useEffect(() => {
+    getAuth()
+  }, []);
+  const baseurl = import.meta.env.VITE_BASE_URL;
+  const data = localStorage.getItem("user")
+
+  const getAuth = async () => {
+    if (data) {
+      try{
+        const Jdata = JSON.parse(data)
+        const res = await axios.get(`${baseurl}auth-check`,{
+          headers:{
+            token: Jdata.token,
+          }
+         
+        })
+        if (res){
+          setAuth({ auth: res.data.auth }); // update state with an object with an 'auth' property
+        }
+      } catch (error) {
+        setAuth({ auth: false }); // update state with an object with an 'auth' property
+      }
+    } else {
+      setAuth({ auth: false }); // update state with an object with an 'auth' property
+    }
+  }
+
+  return (
+    <authContext.Provider value={auth}>{children}</authContext.Provider>
+  )
+}

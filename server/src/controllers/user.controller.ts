@@ -52,7 +52,7 @@ export const Register = async (req: Request, res: Response) => {
         });
         res.status(200).json({
           msg: "User Register Successfully",
-          userId: userId?.id,
+          id: userId?.id,
           token: token,
           account: newAccount,
         });
@@ -151,12 +151,20 @@ export const Transaction = async (req: Request, res: Response) => {
   res.status(200).json({ msg: "transaction successful" });
 };
 export const Authenticate = async (req: Request, res: Response) => {
-  res.status(200).json({ auth: true });
+ return res.status(200).json({ auth: true });
 };
-export const GetUser = async (req: Request, res: Response) => {
+export const GetUsers = async (req: Request, res: Response) => {
   const users = await prisma.user.findMany();
   if (!users) {
     res.status(404).json({ msg: "no users found" });
   }
   res.status(200).json(users);
+};
+export const GetUser = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const user = await prisma.user.findUnique({ where: { id } });
+  if (!user) {
+    return res.status(404).json({ msg: "User Not Found!" });
+  }
+  res.status(200).json(user);
 };

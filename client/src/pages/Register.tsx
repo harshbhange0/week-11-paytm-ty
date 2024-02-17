@@ -59,7 +59,7 @@ export default function Register() {
   }
 
   return (
-    <div className="flex justify-center items-center h-screen flex-col px-2">
+    <div className="flex justify-center items-center h-[calc(100vh-72px-16px)] flex-col px-2">
       <form className="max-w-lg w-full px-5 sm-px-0 mx-auto border py-10 rounded-xl">
         <h1 className="text-4xl mb-10 text-center">Register</h1>
         <div className="grid md:grid-cols-2 md:gap-6">

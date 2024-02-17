@@ -1,15 +1,18 @@
 import axios from "axios";
-import React, { useState } from "react";
+import  { useState } from "react";
 import { toast } from "react-toastify";
 import SetLocal from "../utils/SetLocal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 
 export default function Login() {
+
   const [errorMsg, setErrorMsg] = useState(false);
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   async function handleSubmit() {
     const baseurl = import.meta.env.VITE_BASE_URL;
@@ -21,13 +24,14 @@ export default function Login() {
       }, 500);
     } else {
       try {
-        const res = await axios.post(`${baseurl}register`, {
+        const res = await axios.post(`${baseurl}login`, {
           email: user.email,
           password: user.password,
         });
         toast.success(res.data.msg);
         SetLocal("user", JSON.stringify(res.data));
-
+        navigate("/auth/dashboard");
+        location.reload();
         if (!res) {
           toast.error("User register Failed");
           setErrorMsg(true);
@@ -50,10 +54,9 @@ export default function Login() {
     }
   }
   return (
-    <div className="flex justify-center items-center h-screen flex-col px-2">
+    <div className="flex justify-center items-center h-[calc(100vh-72px-16px)] flex-col px-2">
       <form className="max-w-lg w-full px-5 sm-px-0 mx-auto border py-10 rounded-xl">
         <h1 className="text-4xl mb-10 text-center">Log in</h1>
-
         <div className="relative z-0 w-full mb-5 group">
           <input
             type="email"
