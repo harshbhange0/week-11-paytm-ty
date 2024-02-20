@@ -9,6 +9,7 @@ import {
   Authenticate,
   GetUsers,
   GetUser,
+  GetTransactionHistory,
 } from "../controllers/user.controller";
 import authMiddleware from "../middleware/auth.middleware";
 import addTransaction from "../middleware/transaction.middleware";
@@ -24,6 +25,7 @@ mainRouter.post(
   Transaction,
   addTransaction
 ); // res=> transaction
+mainRouter.get("/transaction-history/:id", authMiddleware, GetTransactionHistory);
 mainRouter.get("/all-users", authMiddleware, GetUsers); // res=> all users[]
 mainRouter.get("/user/:id", authMiddleware, GetUser); // res=>  user{}
 mainRouter.get("/*", (req: Request, res: Response) => {

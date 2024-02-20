@@ -109,7 +109,6 @@ export const GetBalance = async (req: Request, res: Response) => {
     }
   }
 };
-
 export const Transaction = async (
   req: Request,
   res: Response,
@@ -158,13 +157,47 @@ export const Transaction = async (
         where: { userId: to },
       });
     });
-    next()
+    next();
   } catch (error) {
     res.status(400).json({ error: error, msg: "Something went wrong." });
   } finally {
     await prisma.$disconnect();
   }
 };
+export const GetTransactionHistory = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const trHs = await prisma.transaction.findMany({
+      where: {
+        senderId: id,
+      },
+    });
+    let aryUser: any = [];
+    for (const data of trHs) {
+      const sender = await prisma.user.findUnique({
+        where: { id: data.senderId },
+      });
+      const receiver = await prisma.user.findUnique({
+        where: { id: data.receiverId },
+      });
+      if (sender && receiver) {
+        aryUser.push({
+          sender: sender.firstName + " " + sender.lastName,
+          receiver: receiver.firstName + " " + receiver.lastName,
+          amount: data.amount,
+          time: data.createdAt
+        });
+      } else {
+        return res.status(404).json({ msg: "user not found" });
+      }
+    }
+    return res.status(200).json({ transaction_history: aryUser });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({ msg: "error in finding users" });
+  }
+};
+
 export const Authenticate = async (req: Request, res: Response) => {
   return res.status(200).json({ auth: true });
 };

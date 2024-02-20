@@ -1,7 +1,8 @@
 import axios from "axios";
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import LoadingIcon from "../components/LoadingIcon";
 import ContactItem from "../components/ContactItem";
+import TrHistoryWarper from "../components/TrHistoryWarper";
 
 export default function Dashboard() {
   const data = localStorage.getItem("user");
@@ -140,6 +141,8 @@ export default function Dashboard() {
             <LoadingIcon />
           )}
         </div>
+
+        <TrHistoryWarper/>
       </section>
     </div>
   );

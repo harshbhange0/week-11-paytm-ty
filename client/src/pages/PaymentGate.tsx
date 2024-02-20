@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LoadingIcon from "../components/LoadingIcon";
 import { toast } from "react-toastify";
 
@@ -8,6 +8,7 @@ export default function PaymentGate() {
   const data = localStorage.getItem("user");
   const baseurl = import.meta.env.VITE_BASE_URL;
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     getUser();
@@ -72,6 +73,7 @@ export default function PaymentGate() {
         if (res.data.msg) {
           toast.success(res.data.msg);
           setAmount("");
+          navigate("/auth/dashboard");
         }
       } catch (error) {
         console.log(error);
@@ -107,11 +109,11 @@ export default function PaymentGate() {
             type="number"
             aria-describedby="helper-text-explanation"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-center"
-            placeholder="amount"
+            placeholder="amount in Rs"
             required
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-          />
+          />{" "}
           <button
             type="button"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mx-auth block dark:bg-blue-600 dark:hover:bg-blue-700 w-[60%] dark:focus:ring-blue-800"

@@ -5,7 +5,6 @@ import github from "/github.png";
 export default function Nav() {
   const navigate = useNavigate();
   const { auth } = useContext(authContext);
-console.log("nav",auth);
 
   //@ts-ignore
   const NAvLink = ({ isActive }): string => {

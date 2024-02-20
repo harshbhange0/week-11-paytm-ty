@@ -19,9 +19,7 @@ export default function AuthProvider({ children }) {
             token: Jdata.token,
           },
         });
-        console.log("res/auth", res.data.auth);
         setAuth({ ...auth, auth: res.data.auth }); // update state with an object with an 'auth' property
-        console.log("setauth", auth);
       } catch (error) {
         setAuth({ auth: false }); // update state with an object with an 'auth' property
       }

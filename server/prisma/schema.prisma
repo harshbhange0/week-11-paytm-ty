@@ -32,6 +32,6 @@ model Transaction {
   receiver   User     @relation("Receiver", fields: [receiverId], references: [id])
   amount     Int
   createdAt  DateTime @default(now())
-  senderId   String
+  senderId   String   
   receiverId String
 }
