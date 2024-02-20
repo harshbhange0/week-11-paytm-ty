@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SetLocal from "../utils/SetLocal";
 import axios from "axios";
 import { toast } from "react-toastify";
 export default function Register() {
+  const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState(false);
   const [user, setUser] = useState({
     email: "",
@@ -35,7 +36,8 @@ export default function Register() {
         });
         toast.success(res.data.msg);
         SetLocal("user", JSON.stringify(res.data));
-
+        navigate("/auth/dashboard");
+        location.reload();
         if (!res) {
           toast.error("User register Failed");
           setErrorMsg(true);

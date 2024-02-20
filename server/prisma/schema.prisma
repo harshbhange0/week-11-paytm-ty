@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,18 +8,30 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  email     String    @unique
-  password  String
-  Account   Account[]
-  firstName String
-  lastName  String
+  id                     String        @id @default(uuid())
+  email                  String        @unique
+  password               String
+  accounts               Account[]
+  firstName              String
+  lastName               String
+  transactionsAsSender   Transaction[] @relation("Sender")
+  transactionsAsReceiver Transaction[] @relation("Receiver")
 }
 
 model Account {
-  id        Int      @id @default(autoincrement())
-  userEmail User     @relation(fields: [userId], references: [id])
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
   balance   Int
   createdAt DateTime @default(now())
   userId    String   @unique
+}
+
+model Transaction {
+  id         String   @id @default(uuid())
+  sender     User     @relation("Sender", fields: [senderId], references: [id])
+  receiver   User     @relation("Receiver", fields: [receiverId], references: [id])
+  amount     Int
+  createdAt  DateTime @default(now())
+  senderId   String
+  receiverId String
 }

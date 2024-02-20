@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import zod from "zod";
 import generateToken from "../utils/generateToken";
@@ -110,48 +110,63 @@ export const GetBalance = async (req: Request, res: Response) => {
   }
 };
 
-export const Transaction = async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
+export const Transaction = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const from = req.params.id;
   const { to, amount } = req.body;
-  try {
-    const balanceOfSender = await prisma.account.findUnique({ where: { id } });
-    const balanceOfReceiver = await prisma.account.findUnique({
-      where: { id: to },
-    });
-    prisma.$transaction(async () => {
-      if (!balanceOfSender?.balance) {
-        res.status(400).json({
-          msg: "sending user not found",
-        });
-      } else {
-        if (balanceOfSender.balance < amount) {
-          res.status(400).json({
-            msg: "insufficient sender balance",
-          });
-        }
-        await prisma.account.update({
-          data: { balance: balanceOfSender.balance - amount },
-          where: { id },
-        });
-      }
-      if (!balanceOfReceiver?.balance) {
-        res.status(400).json({
-          msg: "reserving user not found",
-        });
-      } else {
-        await prisma.account.update({
-          data: { balance: balanceOfReceiver.balance + amount },
-          where: { id: to },
-        });
-      }
-    });
-  } catch (error) {
-    res.status(400).json({ error: error, msg: "something went wrong" });
+
+  if (from === to) {
+    return res.status(400).json({ msg: "You cannot pay yourself." });
   }
-  res.status(200).json({ msg: "transaction successful" });
+
+  try {
+    const balanceOfSender = await prisma.account.findUnique({
+      where: { userId: from },
+    });
+
+    const balanceOfReceiver = await prisma.account.findUnique({
+      where: { userId: to },
+    });
+
+    if (!balanceOfSender) {
+      return res.status(400).json({
+        msg: "Sending user not found.",
+      });
+    } else if (balanceOfSender.balance < parseInt(amount)) {
+      return res.status(400).json({
+        msg: "Insufficient sender balance.",
+      });
+    }
+
+    await prisma.$transaction(async () => {
+      await prisma.account.update({
+        data: { balance: balanceOfSender.balance - parseInt(amount) },
+        where: { userId: from },
+      });
+
+      if (!balanceOfReceiver) {
+        return res.status(400).json({
+          msg: "Receiving user not found.",
+        });
+      }
+
+      await prisma.account.update({
+        data: { balance: balanceOfReceiver.balance + parseInt(amount) },
+        where: { userId: to },
+      });
+    });
+    next()
+  } catch (error) {
+    res.status(400).json({ error: error, msg: "Something went wrong." });
+  } finally {
+    await prisma.$disconnect();
+  }
 };
 export const Authenticate = async (req: Request, res: Response) => {
- return res.status(200).json({ auth: true });
+  return res.status(200).json({ auth: true });
 };
 export const GetUsers = async (req: Request, res: Response) => {
   const users = await prisma.user.findMany();

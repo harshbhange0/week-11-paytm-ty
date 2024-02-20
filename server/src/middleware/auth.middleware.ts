@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
-import { error } from "console";
+
 const prisma = new PrismaClient();
 export default async (req: Request, res: Response, next: NextFunction) => {
   const token: string = String(req.headers.token);

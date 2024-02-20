@@ -1,9 +1,11 @@
 import { useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { authContext } from "../context/auth";
+import github from "/github.png";
 export default function Nav() {
   const navigate = useNavigate();
   const { auth } = useContext(authContext);
+console.log("nav",auth);
 
   //@ts-ignore
   const NAvLink = ({ isActive }): string => {
@@ -14,7 +16,7 @@ export default function Nav() {
   return (
     <>
       <nav className="border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-        <div className="max-w-screen-xl flex flex-wrap items-center justify-end md:justify-center mx-auto p-4">
+        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <button
             data-collapse-toggle="navbar-solid-bg"
             type="button"
@@ -39,6 +41,7 @@ export default function Nav() {
               />
             </svg>
           </button>
+          <span className="text-2xl font-semibold">Payts</span>
           <div
             className="hidden w-full md:block md:w-auto"
             id="navbar-solid-bg"
@@ -83,6 +86,14 @@ export default function Nav() {
                   </li>
                 </>
               )}
+              <li>
+                <a
+                  href="https://github.com/harshbhange0/week-11-paytm-ty"
+                  target="_blank"
+                >
+                  <img src={github} className="w-7" alt="" />
+                </a>
+              </li>
             </ul>
           </div>
         </div>
