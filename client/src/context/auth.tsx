@@ -14,7 +14,7 @@ export default function AuthProvider({ children }) {
     if (data) {
       try {
         const Jdata = JSON.parse(data);
-        const res = await axios.get(`${baseurl}auth-check`, {
+        const res = await axios.post(`${baseurl}auth-check`, {
           headers: {
             token: Jdata.token,
           },
