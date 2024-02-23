@@ -14,7 +14,7 @@ export default function AuthProvider({ children }) {
     if (data) {
       try {
         const Jdata = JSON.parse(data);
-        const res = await axios.post(`${baseurl}auth-check`, {
+        const res = await axios.get(`${baseurl}auth-check`, {
           headers: {
             token: Jdata.token,
           },
@@ -24,7 +24,7 @@ export default function AuthProvider({ children }) {
         setAuth({ auth: false }); // update state with an object with an 'auth' property
       }
     } else {
-      setAuth({ auth: false }); // update state with an object with an 'auth' property
+      return setAuth({ auth: false }); // update state with an object with an 'auth' property
     }
   };
 
