@@ -17,7 +17,7 @@ const mainRouter = express.Router();
 
 mainRouter.post("/register", Register); // res=> id, token, account
 mainRouter.post("/login", Login); // res=> id, token
-mainRouter.post("/auth-check", authMiddleware, Authenticate); //res=> true&false
+mainRouter.get("/auth-check", authMiddleware, Authenticate); //res=> true&false
 mainRouter.get("/balance/:id", authMiddleware, GetBalance); //res=> some balance
 mainRouter.post(
   "/transaction/:id",

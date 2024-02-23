@@ -11,9 +11,12 @@ export default function Home() {
           </h1>
           <p className="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400 ">
             This project is a
-            <span className="border-b"> React application (Full Stack) </span>
+            <span className="border-b border-red-200">
+              {" "}
+              React application (Full Stack){" "}
+            </span>
             that utilizes various technologies such as <br /> <br />
-            <span className="border-b">
+            <span className="border-b border-red-200">
               Prisma, SQL, Nodejs, Express, TailwindCSS, flowbite (tailwindcss
               component library), Context API, Axios, JWT, Zod, and TypeScript.
             </span>{" "}
