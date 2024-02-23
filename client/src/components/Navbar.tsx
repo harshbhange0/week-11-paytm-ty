@@ -1,11 +1,13 @@
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { authContext } from "../context/auth";
-import github from "/github.png";
+// import github from "/github.png";
 import { FcMoneyTransfer } from "react-icons/fc";
+import { userContext } from "../context/userContext";
 export default function Nav() {
-  const navigate = useNavigate();
   const { auth } = useContext(authContext);
+  const { user, balance } = useContext(userContext);
+  console.log(user?.firstName, balance);
 
   return (
     <>
@@ -50,12 +52,19 @@ export default function Nav() {
                 <div>
                   <button
                     type="button"
-                    className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                    className="flex text-sm bg-gray-100 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600 p-1"
                     aria-expanded="false"
                     data-dropdown-toggle="dropdown-user"
                   >
                     <span className="sr-only">Open user menu</span>
-                    // add img
+                    {auth && (
+                      <div className="uppercase text-xl font-semibold  ">
+                        <span>
+                          {user ? user.firstName.substring(0, 1) : ""}
+                        </span>
+                        <span>{user ? user.lastName.substring(0, 1) : ""}</span>
+                      </div>
+                    )}
                   </button>
                 </div>
                 <div
@@ -64,24 +73,25 @@ export default function Nav() {
                 >
                   <div className="px-4 py-3" role="none">
                     <p
-                      className="text-sm text-gray-900 dark:text-white"
+                      className="text-sm text-gray-900 dark:text-white flex gap-2 capitalize"
                       role="none"
                     >
-                      Neil Sims
+                      <span>{user ? user.firstName : "loading"}</span>
+                      <span>{user ? user.lastName : "loading"}</span>
                     </p>
                     <hr className="my-1" />
                     <p
                       className="text-sm text-gray-900 dark:text-white"
                       role="none"
                     >
-                      Email:
+                      Email: {user ? user.email : "loading"}
                     </p>
                     <hr className="my-1" />
                     <p
                       className="text-sm text-gray-900 dark:text-white"
                       role="none"
                     >
-                      Balance :
+                      Balance: {balance ? balance : "loading"}
                     </p>
                   </div>
                 </div>

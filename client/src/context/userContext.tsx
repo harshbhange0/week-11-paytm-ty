@@ -1,7 +1,10 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 
-export const userContext = createContext({ user: {}, users: [], balance: 0 });
+export const userContext = createContext({
+  user: { id: "", email: "", firstName: "", lastName: "" },
+  balance: 0,
+});
 
 export default function UserProvider({ children }) {
   const data = localStorage.getItem("user");
@@ -12,12 +15,11 @@ export default function UserProvider({ children }) {
     lastName: "",
   });
   const [balance, setBalance] = useState(0);
-  const [users, setUsers] = useState([]);
   const baseurl = import.meta.env.VITE_BASE_URL;
   useEffect(() => {
     getUser();
     getBalance();
-    getAllUsers();
+   
   }, []);
   const getBalance = async () => {
     if (data) {
@@ -69,36 +71,9 @@ export default function UserProvider({ children }) {
       });
     }
   };
-  const getAllUsers = async () => {
-    if (data) {
-      const Jdata = JSON.parse(data);
-      try {
-        const res = await axios.get(`${baseurl}all-users`, {
-          headers: {
-            token: Jdata.token,
-          },
-        });
-        if (res) {
-          setTimeout(() => {
-            setUsers(res.data);
-          }, 1000);
-        }
-      } catch (error) {
-        setUsers([]);
-      }
-    } else {
-      let x = {
-        id: "undefined",
-        email: "undefined",
-        firstName: "undefined",
-        lastName: "undefined",
-      };
-      //@ts-ignore
-      setUsers([x]);
-    }
-  };
+ 
   return (
-    <userContext.Provider value={{user, users, balance}}>
+    <userContext.Provider value={{ user, balance }}>
       {children}
     </userContext.Provider>
   );
