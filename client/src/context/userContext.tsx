@@ -1,10 +1,9 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import LoadingIcon from "../components/LoadingIcon";
-import ContactItem from "../components/ContactItem";
-import TrHistoryWarper from "../components/TrHistoryWarper";
+import { createContext, useEffect, useState } from "react";
 
-export default function Dashboard() {
+export const userContext = createContext({ user: {}, users: [], balance: 0 });
+
+export default function UserProvider({ children }) {
   const data = localStorage.getItem("user");
   const [user, setUser] = useState({
     id: "",
@@ -15,10 +14,10 @@ export default function Dashboard() {
   const [balance, setBalance] = useState(0);
   const [users, setUsers] = useState([]);
   const baseurl = import.meta.env.VITE_BASE_URL;
-
   useEffect(() => {
     getUser();
     getBalance();
+    getAllUsers();
   }, []);
   const getBalance = async () => {
     if (data) {
@@ -70,6 +69,37 @@ export default function Dashboard() {
       });
     }
   };
-
-  return <main></main>;
+  const getAllUsers = async () => {
+    if (data) {
+      const Jdata = JSON.parse(data);
+      try {
+        const res = await axios.get(`${baseurl}all-users`, {
+          headers: {
+            token: Jdata.token,
+          },
+        });
+        if (res) {
+          setTimeout(() => {
+            setUsers(res.data);
+          }, 1000);
+        }
+      } catch (error) {
+        setUsers([]);
+      }
+    } else {
+      let x = {
+        id: "undefined",
+        email: "undefined",
+        firstName: "undefined",
+        lastName: "undefined",
+      };
+      //@ts-ignore
+      setUsers([x]);
+    }
+  };
+  return (
+    <userContext.Provider value={{user, users, balance}}>
+      {children}
+    </userContext.Provider>
+  );
 }

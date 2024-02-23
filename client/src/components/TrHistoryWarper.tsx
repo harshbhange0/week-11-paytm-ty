@@ -1,5 +1,5 @@
 import axios from "axios";
-import{ useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import LoadingIcon from "./LoadingIcon";
 import TrHistoryItem from "./TrHistoryItem";
 
@@ -38,7 +38,7 @@ export default function TrHistoryWarper() {
   };
 
   return loading ? (
-    <div className=" py-5 px-2 md:px-10 w-full">
+    <div className="pb-5 px-2 md:px-10 w-full h-full">
       <h1 className="text-2xl mb-3 text-center font-semibold">
         Transaction History
       </h1>
@@ -66,6 +66,8 @@ export default function TrHistoryWarper() {
       </table>
     </div>
   ) : (
-    <LoadingIcon />
+    <div className="flex justify-center items-center flex-col">
+      <LoadingIcon />
+    </div>
   );
 }
