@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { authContext } from "../context/auth";
 // import github from "/github.png";
 import { FcMoneyTransfer } from "react-icons/fc";
