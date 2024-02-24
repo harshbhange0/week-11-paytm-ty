@@ -42,7 +42,7 @@ export default function TrHistoryWarper() {
       <h1 className="text-2xl mb-3 text-center font-semibold">
         Transaction History
       </h1>
-      <table className="blueTable capitalize">
+      <table className="blueTable capitalize ">
         <thead>
           <tr>
             <th>Time</th>

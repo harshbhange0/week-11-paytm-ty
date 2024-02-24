@@ -4,13 +4,14 @@ table.blueTable {
   width: 100%;
   text-align: center;
   border-collapse: collapse;
+  table-layout: fixed; 
 }
+
 table.blueTable td,
 table.blueTable th {
   border: 1px solid #ccc;
   text-align: center;
   padding: 3px 2px;
-  
 }
 table.blueTable tbody td {
   font-size: 13px;

@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-
 //@ts-ignore
 export default function ContactItem({ user }) {
-  const [q, setQ] = useState(false);
+  const [q, setQ] = useState(false); // current user
   useEffect(() => {
     handlePay();
   }, []);
@@ -20,21 +19,28 @@ export default function ContactItem({ user }) {
     }
   };
 
-  return !q ? (
-    <div className="w-full border hover:bg-blue-100/50 transition border-blue-200 bg-blue-100/20 rounded-md  p-3 flex justify-between items-center flex-row">
-      <div className="flex gap-2 text-xl capitalize">
-        <span>{user.firstName ? user.firstName : "..."}</span>
-        <span>{user.lastName ? user.lastName : "..."}</span>
-      </div>
-
-      <Link
-        className="bg-green-500 transition hover:bg-green-400 text-white px-2 py-1 rounded-md"
-        to={`/auth/dashboard/payment/${user.id}`}
-      >
-        Pay
-      </Link>
-    </div>
-  ) : (
-    ""
+  return (
+    !q && (
+      <>
+        <Link
+          to={`/auth/dashboard/payment/${user.id}`}
+          className="w-full "
+        >
+          <div className="border px-3 rounded-md p-1 flex flex-row items-center gap-5 ">
+            <div className="uppercase rounded-full text-sm font-semibold bg-blue-200/40 p-1">
+              <span>{user ? user.firstName.substring(0, 1) : ""}</span>
+              <span>{user ? user.lastName.substring(0, 1) : ""}</span>
+            </div>
+            <div>
+              <span>{user ? user.firstName : "..."}</span>
+              <span>{user ? user.lastName : "..."}</span>
+            </div>
+            <div className="ms-auto">
+              <span className="text-[12px]">{user ? user.email : "..."}</span>
+            </div>
+          </div>
+        </Link>
+      </>
+    )
   );
 }
