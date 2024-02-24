@@ -13,13 +13,12 @@ import {
 } from "../controllers/user.controller";
 import authMiddleware from "../middleware/auth.middleware";
 import addTransaction from "../middleware/transaction.middleware";
-import Log from "../middleware/log";
 const mainRouter = express.Router();
 
-mainRouter.post("/register", Log, Register); // res=> id, token, account
-mainRouter.post("/login", Log, Login); // res=> id, token
-mainRouter.get("/auth-check", Log, authMiddleware, Authenticate); //res=> true&false
-mainRouter.get("/balance/:id", Log, authMiddleware, GetBalance); //res=> some balance
+mainRouter.post("/register", Register); // res=> id, token, account
+mainRouter.post("/login", Login); // res=> id, token
+mainRouter.get("/auth-check", authMiddleware, Authenticate); //res=> true&false
+mainRouter.get("/balance/:id", authMiddleware, GetBalance); //res=> some balance
 mainRouter.post(
   "/transaction/:id",
   authMiddleware,
@@ -28,16 +27,16 @@ mainRouter.post(
 ); // res=> transaction
 mainRouter.get(
   "/transaction-history/:id",
-  Log,
+ 
   authMiddleware,
   GetTransactionHistory
 );
-mainRouter.get("/all-users", Log, authMiddleware, GetUsers); // res=> all users[]
-mainRouter.get("/user/:id", Log, authMiddleware, GetUser); // res=>  user{}
-mainRouter.get("/*", Log, (req: Request, res: Response) => {
+mainRouter.get("/all-users", authMiddleware, GetUsers); // res=> all users[]
+mainRouter.get("/user/:id", authMiddleware, GetUser); // res=>  user{}
+mainRouter.get("/*", (req: Request, res: Response) => {
   res.status(404).json({ msg: "Not Found" });
 });
-mainRouter.post("/*", Log, (req: Request, res: Response) => {
+mainRouter.post("/*", (req: Request, res: Response) => {
   res.status(404).json({ msg: "Not Found" });
 });
 
